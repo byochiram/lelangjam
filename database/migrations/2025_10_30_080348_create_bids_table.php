@@ -16,10 +16,8 @@ return new class extends Migration
             $table->foreignId('lot_id')->constrained('auction_lots')->cascadeOnDelete();
             $table->foreignId('bidder_profile_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount',14,2);
-            $table->timestamp('placed_at');
-            $table->enum('status',['OUTBID','WINNING'])->default('WINNING');
             $table->timestamps();
-            $table->index(['lot_id','placed_at']);
+            $table->index(['lot_id','created_at']);
             $table->index(['lot_id','amount']);
         });
     }

@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\ProcessEndedAuctions;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,9 +13,31 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'can-bid' => \App\Http\Middleware\EnsureUserCanBid::class,
+            'throttle.bid' => \App\Http\Middleware\ThrottleBidRequests::class,
+        ]);
     })
+
+    ->withCommands([
+        ProcessEndedAuctions::class,
+        ExpirePendingPayments::class,
+    ])
+
+    ->withSchedule(function (Schedule $schedule) {
+        // proses lelang selesai (set winner + buat invoice)
+        $schedule->command('auctions:process-ended')->everyMinute();
+
+        // proses payment kadaluarsa + suspend bidder 7 hari
+        $schedule->command('payments:expire-pending')->everyMinute();
+
+        // proses kirim notif mendekati expire payment
+        $schedule->command('payments:send-reminders')->everyMinute();
+    })
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

@@ -16,9 +16,10 @@ class AdminSeeder extends Seeder
         User::updateOrCreate(
             ['email'=>'admin@lelangjam.local'],
             [
-                'name'=>'Admin Lelang',
+                'name'=>'Superadmin Lelang',
+                'username' => 'Superadmin',
                 'password'=>bcrypt('password'),
-                'role'=>'ADMIN',
+                'role'=>'SUPERADMIN',
                 'status'=>'ACTIVE',
                 'email_verified_at'=>now(),
             ]

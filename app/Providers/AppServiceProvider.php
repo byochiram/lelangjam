@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
+use Livewire\Livewire;
+use App\Livewire\Profile\UpdateProfileInformationForm;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Alias bawaan Jetstream: 'profile.update-profile-information-form'
+        Livewire::component(
+            'profile.update-profile-information-form',
+            UpdateProfileInformationForm::class
+        );
+
+        Password::defaults(function () {
+            $rule = Password::min(8)
+                ->letters()   // harus ada huruf
+                ->numbers();  // harus ada angka
+
+            // Kalau di production, sedikit lebih ketat:
+            if (app()->isProduction()) {
+                $rule->mixedCase()    // ada huruf besar & kecil
+                    ->symbols()      // ada simbol
+                    ->uncompromised(); // tidak termasuk password yang pernah bocor publik
+            }
+
+            return $rule;
+        });
     }
 }

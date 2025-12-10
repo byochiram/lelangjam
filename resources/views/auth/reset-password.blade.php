@@ -1,36 +1,71 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<x-auth-layout>
+    <div class="h-screen w-full flex items-center justify-center bg-slate-50">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8">
 
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
-
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
+            {{-- Logo + title --}}
+            <div class="flex items-center gap-3 mb-6">
+                <x-authentication-card-logo class="h-9 w-9" />
+                <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-500">
+                        Tempus Auctions
+                    </p>
+                    <p class="text-sm text-slate-800">
+                        Buat kata sandi baru
+                    </p>
+                </div>
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
+            <x-validation-errors class="mb-4" />
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
+            <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
+                @csrf
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                <div>
+                    <x-label for="email" value="{{ __('Email') }}" required/>
+                    <x-input id="email"
+                             class="block mt-1 w-full rounded-xl border-slate-200
+                                    focus:border-slate-500 focus:ring-slate-300"
+                             type="email"
+                             name="email"
+                             :value="old('email', $request->email)"
+                             required autofocus autocomplete="username" />
+                </div>
+
+                <div>
+                    <x-label for="password" value="{{ __('Password') }}" required/>
+                    <x-input id="password"
+                             class="block mt-1 w-full rounded-xl border-slate-200
+                                    focus:border-slate-500 focus:ring-slate-300"
+                             type="password"
+                             name="password"
+                             required autocomplete="new-password" />
+                </div>
+
+                <div>
+                    <x-label for="password_confirmation" value="{{ __('Konfirmasi Password') }}" required/>
+                    <x-input id="password_confirmation"
+                             class="block mt-1 w-full rounded-xl border-slate-200
+                                    focus:border-slate-500 focus:ring-slate-300"
+                             type="password"
+                             name="password_confirmation"
+                             required autocomplete="new-password" />
+                </div>
+
+                <div class="pt-2">
+                    <x-button class="w-full justify-center rounded-xl bg-slate-900 hover:bg-slate-800">
+                        {{ __('Reset Password') }}
+                    </x-button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-slate-600">
+                <a href="{{ route('login') }}"
+                   class="font-medium text-slate-900 hover:text-slate-700 underline-offset-2 hover:underline">
+                    Kembali ke halaman masuk
+                </a>
             </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+        </div>
+    </div>
+</x-auth-layout>

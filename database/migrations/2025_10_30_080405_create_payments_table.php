@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lot_id')->unique()->constrained('auction_lots')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('bidder_profile_id')->constrained('bidder_profiles');
             $table->string('invoice_no')->unique();
             $table->decimal('amount_due',14,2);
             $table->string('status')->default('PENDING')->index();

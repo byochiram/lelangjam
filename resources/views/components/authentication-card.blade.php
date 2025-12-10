@@ -1,9 +1,23 @@
-<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-    <div>
-        {{ $logo }}
-    </div>
+@props(['logo'])
 
-    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+<div class="flex justify-center w-full">
+    <div
+        class="
+            w-full
+            max-w-[480px]      {{-- <== di sini yang bikin lebih lebar --}}
+            bg-white
+            border border-slate-200
+            rounded-2xl
+            shadow-sm
+            p-8 md:p-10
+        "
+    >
+        @if (isset($logo))
+            <div class="flex justify-center mb-6">
+                {{ $logo }}
+            </div>
+        @endif
+
         {{ $slot }}
     </div>
 </div>

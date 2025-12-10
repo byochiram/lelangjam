@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('auction_lots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->decimal('start_price',14,2);
             $table->decimal('increment',14,2)->default(1);
-            $table->decimal('current_price',14,2);
+            $table->decimal('current_price',14,2)->nullable();
             $table->timestamp('start_at')->useCurrent();
             $table->timestamp('end_at')->useCurrent();
-            $table->string('status')->default('SCHEDULED')->index();
-            //$table->foreignId('winner_bid_id')->nullable()->constrained('bids')->nullOnDelete();
+            $table->timestamp('cancelled_at')->nullable()->index();
+            $table->string('cancel_reason')->nullable();
             $table->unsignedBigInteger('winner_bid_id')->nullable();
-            $table->foreignId('winner_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->index(['start_at','end_at']);
         });
